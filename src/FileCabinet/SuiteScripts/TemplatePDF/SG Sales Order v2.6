@@ -1,9 +1,9 @@
 <!--
-	Version		: SG Sales Order v2.5
+	Version		: SG Sales Order v2.6
 	Dev By		: Rian
 
 	Change Log
-	YYYY-MM-DD	: 
+	2025-12-04	: correction condition uncompleted order (Released)
 -->
 
 <?xml version="1.0"?>
@@ -373,115 +373,182 @@
 							</tr>
 						</thead>
 					</#if>
-					<tr>
+					
 
-						<#assign qtyOrder = (item.quantity?has_content)?then(item.quantity?replace(",", "")?number, 0)>
-						<#assign qtyInvoice = (item.quantitybilled?has_content)?then(item.quantitybilled?replace(",", "")?number, 0)>
-						<#assign qtyRemaining = qtyOrder - qtyInvoice>
+                    <#assign qtyOrder = (item.quantity?has_content)?then(item.quantity?replace(",", "")?number, 0)>
+                    <#assign qtyInvoice = (item.quantitybilled?has_content)?then(item.quantitybilled?replace(",", "")?number, 0)>
+                    <#assign qtyRemaining = qtyOrder - qtyInvoice>
 
-						<#if record.custbody_aca_only_show_incomplete == true>
-							<#if qtyRemaining gt 0>
-								<td class="borderkanan" align="right">${item.quantity}</td>
-								<td class="borderkanan" align="right">${item.quantityfulfilled}</td>
-								<td class="borderkanan" align="right">${item.quantitybackordered}</td>
-								<td class="borderkanan" align="left">
-									<#if item.custcol_aca_vendor_name_code?has_content>
-										${item.item} /<br />${item.custcol_aca_vendor_name_code}
-									<#else>
-										${item.item}
-									</#if>
-								</td>
-								<td class="borderkanan" align="left">
-									${item.description}
-									
-								</td>
-								<td class="borderkanan" align="right">${item.rate}</td>
-								<td class="borderkanan" align="left">${item.units}</td>
-								<td align="right">${item.amount}</td>
-							</#if>
-						<#else>
-							<td class="borderkanan" align="right">${item.quantity}</td>
-							<td class="borderkanan" align="right">${item.quantityfulfilled}</td>
-							<td class="borderkanan" align="right">${item.quantitybackordered}</td>
-							<td class="borderkanan" align="left">
-								<#if item.custcol_aca_vendor_name_code?has_content>
-									${item.item} /<br />${item.custcol_aca_vendor_name_code}
-								<#else>
-									${item.item}
-								</#if>
-							</td>
-							<td class="borderkanan" align="left">
-								${item.description}
-								
-							</td>
-							<td class="borderkanan" align="right">${item.rate}</td>
-							<td class="borderkanan" align="left">${item.units}</td>
-							<td align="right">${item.amount}</td>
-						</#if>
-					</tr>
+                    <#if record.custbody_aca_only_show_incomplete == true>
+                        <#if qtyRemaining gt 0>
+                            <tr>
+                                <td class="borderkanan" align="right">${item.quantity}</td>
+                                <td class="borderkanan" align="right">${item.quantityfulfilled}</td>
+                                <td class="borderkanan" align="right">${item.quantitybackordered}</td>
+                                <td class="borderkanan" align="left">
+                                    <#if item.custcol_aca_vendor_name_code?has_content>
+                                        ${item.item} /<br />${item.custcol_aca_vendor_name_code}
+                                    <#else>
+                                        ${item.item}
+                                    </#if>
+                                </td>
+                                <td class="borderkanan" align="left">
+                                    ${item.description}
+                                    
+                                </td>
+                                <td class="borderkanan" align="right">${item.rate}</td>
+                                <td class="borderkanan" align="left">${item.units}</td>
+                                <td align="right">${item.amount}</td>
+                            </tr>
 
-					<#if item.custcol_itemcomm?has_content>
-						<tr>
-							<td class="borderkanan"></td>
-							<td class="borderkanan"></td>
-							<td class="borderkanan"></td>
-							<td class="borderkanan"></td>
-							<td class="borderkanan" align="left">
-								<b>COMMENT :</b>
-								<br />
-								${item.custcol_itemcomm}
-							</td>
-							<td class="borderkanan"></td>
-							<td class="borderkanan"></td>
-							<td></td>
-						</tr>
-					</#if>
+                            <#if item.custcol_itemcomm?has_content>
+                                <tr>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan" align="left">
+                                        <b>COMMENT :</b>
+                                        <br />
+                                        ${item.custcol_itemcomm}
+                                    </td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td></td>
+                                </tr>
+                            </#if>
 
-					<#if item.custcol_aca_inv_detail_number?? && item.custcol_aca_inv_detail_number?has_content>
-						<#assign serials = item.custcol_aca_inv_detail_number?split(",") />
-						<#assign serialCount = serials?size />
+                            <#if item.custcol_aca_inv_detail_number?? && item.custcol_aca_inv_detail_number?has_content>
+                                <#assign serials = item.custcol_aca_inv_detail_number?split(",") />
+                                <#assign serialCount = serials?size />
 
-						<tr>
-							<td class="borderkanan"></td>
-							<td class="borderkanan"></td>
-							<td class="borderkanan"></td>
-							<td class="borderkanan"></td>
-							<td class="borderkanan serial" align="left"><b>SERIAL NUMBER :</b></td>
-							<td class="borderkanan"></td>
-							<td class="borderkanan"></td>
-							<td></td>
-						</tr>
+                                <tr>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan serial" align="left"><b>SERIAL NUMBER :</b></td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td></td>
+                                </tr>
 
-						<#list serials as serial>
-							<tr>
-								<td class="borderkanan"></td>
-								<td class="borderkanan"></td>
-								<td class="borderkanan"></td>
-								<td class="borderkanan"></td>
-								<td class="borderkanan serial" align="left">${serial}</td>
-								<td class="borderkanan"></td>
-								<td class="borderkanan"></td>
-								<td></td>
-							</tr>
-						</#list>
-					</#if>
+                                <#list serials as serial>
+                                    <tr>
+                                        <td class="borderkanan"></td>
+                                        <td class="borderkanan"></td>
+                                        <td class="borderkanan"></td>
+                                        <td class="borderkanan"></td>
+                                        <td class="borderkanan serial" align="left">${serial}</td>
+                                        <td class="borderkanan"></td>
+                                        <td class="borderkanan"></td>
+                                        <td></td>
+                                    </tr>
+                                </#list>
+                            </#if>
 
-					<#if item?is_last>
-						<tr>
-							<td class="borderkanan"></td>
-							<td class="borderkanan"></td>
-							<td class="borderkanan"></td>
-							<td class="borderkanan"></td>
-							<td class="borderkanan" align="left">
-								<b>END USER :</b>
-								<br />
-								${record.cseg1}
-							</td>
-							<td class="borderkanan"></td>
-							<td class="borderkanan"></td>
-							<td></td>
-						</tr>
-					</#if>
+                            <#if item?is_last>
+                                <tr>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan" align="left">
+                                        <b>END USER :</b>
+                                        <br />
+                                        ${record.cseg1}
+                                    </td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td></td>
+                                </tr>
+                            </#if>
+
+                        </#if>
+                    <#else>
+                        <tr>
+                            <td class="borderkanan" align="right">${item.quantity}</td>
+                            <td class="borderkanan" align="right">${item.quantityfulfilled}</td>
+                            <td class="borderkanan" align="right">${item.quantitybackordered}</td>
+                            <td class="borderkanan" align="left">
+                                <#if item.custcol_aca_vendor_name_code?has_content>
+                                    ${item.item} /<br />${item.custcol_aca_vendor_name_code}
+                                <#else>
+                                    ${item.item}
+                                </#if>
+                            </td>
+                            <td class="borderkanan" align="left">
+                                ${item.description}
+                                
+                            </td>
+                            <td class="borderkanan" align="right">${item.rate}</td>
+                            <td class="borderkanan" align="left">${item.units}</td>
+                            <td align="right">${item.amount}</td>
+                        </tr>
+
+                        <#if item.custcol_itemcomm?has_content>
+                            <tr>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan" align="left">
+                                    <b>COMMENT :</b>
+                                    <br />
+                                    ${item.custcol_itemcomm}
+                                </td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td></td>
+                            </tr>
+                        </#if>
+
+                        <#if item.custcol_aca_inv_detail_number?? && item.custcol_aca_inv_detail_number?has_content>
+                            <#assign serials = item.custcol_aca_inv_detail_number?split(",") />
+                            <#assign serialCount = serials?size />
+
+                            <tr>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan serial" align="left"><b>SERIAL NUMBER :</b></td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td></td>
+                            </tr>
+
+                            <#list serials as serial>
+                                <tr>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan serial" align="left">${serial}</td>
+                                    <td class="borderkanan"></td>
+                                    <td class="borderkanan"></td>
+                                    <td></td>
+                                </tr>
+                            </#list>
+                        </#if>
+
+                        <#if item?is_last>
+                            <tr>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan" align="left">
+                                    <b>END USER :</b>
+                                    <br />
+                                    ${record.cseg1}
+                                </td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td></td>
+                            </tr>
+                        </#if>
+                    </#if>
 				</#list><!--
 				end items -->
 			</table>
