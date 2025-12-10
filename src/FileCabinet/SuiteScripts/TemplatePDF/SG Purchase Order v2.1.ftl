@@ -7,7 +7,7 @@
 
     Change Log
     ==========
-    20251210
+    20251210 - SG Purchase Order v2.1
         Change condition to print Ship To with this priority
             1. record.custbody_aca_sub_ship_address | Default Ship To
             2. record.shipaddress                   | If need custom Ship To, No 1 need set empty
