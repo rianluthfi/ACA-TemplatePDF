@@ -3,6 +3,22 @@
 
 <#-- 
 
+	Subsidiary	: ACA Malaysia
+	Type		: Sales Order
+
+
+	Structure Item Description
+	==========================
+	1. item.description
+	2. item.custcol_itemcomm				| (if has_content)
+	3. item.custcol_my_license_key			| (if has_content)
+	4. item.custcol_my_expire_date			| (if has_content)
+	5. item.custcol_aca_use_manual_sn		| (if true)
+		5.a	item.custcol_aca_manual_sn_1	| (if has_content)
+		5.b	item.custcol_aca_manual_sn_2	| (if has_content)
+		5.c	item.custcol_aca_manual_sn_3	| (if has_content)
+	6. item.cseg1							| (if has_content) and put in last item
+
     Change Log
     ==========
     Version 2.0 | 2025-12-08 | By Rian
@@ -395,7 +411,7 @@
                             <td align="right">${itemamount?string['#,##0.00']}</td>
                         </tr>
 
-                        <#--  <#if item.custcol_itemcomm!="">
+                        <#if item.custcol_itemcomm!="">
                             <tr>
                                 <td class="borderkanan"></td>
                                 <td class="borderkanan"></td>
@@ -403,14 +419,13 @@
                                 <td class="borderkanan"></td>
                                 <td class="borderkanan" align="left">
                                     <br />
-                                    <br />
                                     ${item.custcol_itemcomm}
                                 </td>
                                 <td class="borderkanan"></td>
                                 <td class="borderkanan"></td>
                                 <td></td>
                             </tr>
-                        </#if>  -->
+                        </#if>
 
                         <#if item.custcol_my_license_key!="">
                             <tr>
@@ -419,7 +434,6 @@
                                 <td class="borderkanan"></td>
                                 <td class="borderkanan"></td>
                                 <td class="borderkanan" align="left">
-                                    <br />
                                     <br />
                                     <strong>License Key : </strong>${item.custcol_my_license_key}
                                 </td>
@@ -437,7 +451,6 @@
                                 <td class="borderkanan"></td>
                                 <td class="borderkanan" align="left">
                                     <br />
-                                    <br />
                                     <strong>Expiry Date : </strong>${item.custcol_my_expire_date}
                                 </td>
                                 <td class="borderkanan"></td>
@@ -446,6 +459,86 @@
                             </tr>
                         </#if>
 
+						<#if item.custcol_aca_use_manual_sn == true>
+							<tr>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan serial" align="left">
+									<br />
+									<b>SERIAL NUMBER :</b>
+								</td>
+                                <td class="borderkanan"></td>
+                                <td class="borderkanan"></td>
+                                <td></td>
+                            </tr>
+
+							<#if item.custcol_aca_manual_sn_1?has_content>
+								<#assign manual_sn_1 = item.custcol_aca_manual_sn_1?split(",") />
+
+								<#list manual_sn_1 as serial_1>
+									<#assign clean_serial_1 = serial_1?string?replace(' ', '')?replace('\t', '')?replace('\r', '')?replace('\n', '') />
+
+									<tr>
+										<td class="borderkanan"></td>
+										<td class="borderkanan"></td>
+										<td class="borderkanan"></td>
+										<td class="borderkanan"></td>
+										<td class="borderkanan serial" align="left">
+											${clean_serial_1}
+										</td>
+										<td class="borderkanan"></td>
+										<td class="borderkanan"></td>
+										<td></td>
+									</tr>
+								</#list>
+							</#if>
+
+							<#if item.custcol_aca_manual_sn_2?has_content>
+								<#assign manual_sn_2 = item.custcol_aca_manual_sn_2?split(",") />
+
+								<#list manual_sn_2 as serial_2>
+									<#assign clean_serial_2 = serial_2?string?replace(' ', '')?replace('\t', '')?replace('\r', '')?replace('\n', '') />
+
+									<tr>
+										<td class="borderkanan"></td>
+										<td class="borderkanan"></td>
+										<td class="borderkanan"></td>
+										<td class="borderkanan"></td>
+										<td class="borderkanan serial" align="left">
+											${clean_serial_2}
+										</td>
+										<td class="borderkanan"></td>
+										<td class="borderkanan"></td>
+										<td></td>
+									</tr>
+								</#list>
+							</#if>
+
+							<#if item.custcol_aca_manual_sn_3?has_content>
+								<#assign manual_sn_3 = item.custcol_aca_manual_sn_3?split(",") />
+
+								<#list manual_sn_3 as serial_3>
+									<#assign clean_serial_3 = serial_3?string?replace(' ', '')?replace('\t', '')?replace('\r', '')?replace('\n', '') />
+
+									<tr>
+										<td class="borderkanan"></td>
+										<td class="borderkanan"></td>
+										<td class="borderkanan"></td>
+										<td class="borderkanan"></td>
+										<td class="borderkanan serial" align="left">
+											${clean_serial_3}
+										</td>
+										<td class="borderkanan"></td>
+										<td class="borderkanan"></td>
+										<td></td>
+									</tr>
+								</#list>
+							</#if>
+						</#if>
+
+						<!--
                         <#if item.custcol_aca_inv_detail_number?? && item.custcol_aca_inv_detail_number?has_content>
                             <#assign serials = item.custcol_aca_inv_detail_number?split(",") />
 
@@ -477,6 +570,7 @@
                                 </tr>
                             </#list>
                         </#if>
+						-->
                     </#if>
 
                     <!-- Add this condition for the last item --> 
@@ -489,7 +583,6 @@
                                 <td class="borderkanan"></td>
                                 <td class="borderkanan"></td>
                                 <td class="borderkanan" align="left">
-                                    <br />
                                     <br />
                                     <strong>END USER : </strong>${item.cseg1}
                                 </td>
