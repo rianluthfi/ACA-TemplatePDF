@@ -1,5 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE pdf PUBLIC "-//big.faceless.org//report" "report-1.1.dtd">
+<#--
+    Subsidiary	    : ACA Malaysia
+	Type		    : Sales Order for Proforma Purpose
+    Template Name   : MY Proforma Invoice v1.1
+
+    Change Log
+    ==========
+    Version 1.1 | 2025-12-17 | By Rian
+        * [Requested by Jassy] Change the item code reference back to the original Item Code instead of the Vendor Name Code (Custom column).
+            This change will be implemented across all order processes.
+-->
+
+
 <pdf>
 	<head>
 		<link name="NotoSans" type="font" subtype="truetype" src="${nsfont.NotoSans_Regular}" src-bold="${nsfont.NotoSans_Bold}" src-italic="${nsfont.NotoSans_Italic}" src-bolditalic="${nsfont.NotoSans_BoldItalic}" bytes="2" />
@@ -379,11 +392,7 @@
 					<#if item.class!="COGS">
 						<td class="borderkanan" align="right">${item.quantity}</td>
 						<td class="borderkanan" align="left">
-							<#if item.custcol_aca_vendor_name_code?has_content>
-								${item.custcol_aca_vendor_name_code}
-							<#else>
-								${item.item}
-							</#if>
+							${item.item}
 						</td>
 						<td class="borderkanan" align="left">
 							${item.description}
