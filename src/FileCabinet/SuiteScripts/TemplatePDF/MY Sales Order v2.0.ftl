@@ -465,10 +465,7 @@
                                 <td class="borderkanan"></td>
                                 <td class="borderkanan"></td>
                                 <td class="borderkanan"></td>
-                                <td class="borderkanan serial" align="left">
-									<br />
-									<b>SERIAL NUMBER :</b>
-								</td>
+                                <td class="borderkanan serial" align="left"><b>SERIAL NUMBER :</b></td>
                                 <td class="borderkanan"></td>
                                 <td class="borderkanan"></td>
                                 <td></td>
@@ -583,6 +580,7 @@
                                 <td class="borderkanan"></td>
                                 <td class="borderkanan"></td>
                                 <td class="borderkanan" align="left">
+                                    <br />
                                     <br />
                                     <strong>END USER : </strong>${item.cseg1}
                                 </td>
