@@ -134,100 +134,127 @@
 				</table>
 			</macro>
 			<macro id="nlfooter">
-				<#if record.custbody_item_commentsg?has_content>
-					<table class="comment" style="break-inside: avoid; margin-top: 10px; width: 676.27px; height: 70px" border="1">
-						<tr>
-							<td>
-								<b>Comment : </b>
-								<br/>
-								${record.custbody_item_commentsg}
-							</td>
-						</tr>
-					</table>
-				</#if>	
-				<table style="break-inside: avoid; margin-top: 10px; width: 676.27px;" border="1">
-					<tr>
-						<#if record.currency == "USD">
-							<td style="width: 383px; vertical-align: top; font-size: 9px;" colspan="4" rowspan="7">
-								<strong>Banking Instructions (Bank Charges to be borne by Payer):</strong>
-								<br />
-								"Oversea-Chinese Banking Corporation Ltd<br />
-								65 Chulia Street, OCBC Centre (S) 049513<br />
-								Swift Code: OCBCSGSG<br />
-								Account Name: ACA Pacific Technology (S) Pte Ltd<br />
-								Account Number (USD): 501-002927-301"
-							</td>
-						<#else>
-							<td style="width: 383px; vertical-align: top; font-size: 9px;" colspan="4" rowspan="7">
-								<strong>Banking Instructions (Bank Charges to be borne by Payer):</strong>
-								<br />
-								"Oversea-Chinese Banking Corporation Ltd<br />
-								65 Chulia Street, OCBC Centre (S) 049513<br />
-								Swift Code: OCBCSGSG<br />
-								Account Name: ACA Pacific Technology (S) Pte Ltd<br />
-								Account Number (SGD): 504-032483-001"
-							</td>
-						</#if>
-						<td style="font-weight: bold; color: rgb(51, 51, 51); width: 180px;">&nbsp;</td>
-						<td style="width: 86px;" align="right">&nbsp;</td>
-					</tr>
-					<tr>
-						<td style="font-weight: bold; color: rgb(51, 51, 51); width: 180px;">
-							<span style="font-size: 10px;">Less</span>
-						</td>
-						<td style="width: 86px;" align="right">&nbsp;</td>
-					</tr>
-					<tr>
-						<td style="font-weight: bold; color: rgb(51, 51, 51); width: 180px;">
-							<span style="font-size: 10px;">&nbsp; &nbsp;Included Tax</span>
-						</td>
-						<td style="width: 86px;" align="right">&nbsp;</td>
-					</tr>
-					<tr>
-						<td style="font-weight: bold; color: rgb(51, 51, 51); width: 180px;">
-							<span style="font-size: 10px;">&nbsp; &nbsp;Order Discount</span>
-						</td>
-						<td style="width: 86px;" align="right">
-							<span style="font-size: 8pt;">${record.discounttotal}</span>
-						</td>
-					</tr>
-					<tr>
-						<td style="font-weight: bold; color: rgb(51, 51, 51); width: 180px;">
-							<span style="font-size: 10px;">${record.subtotal@label}</span>
-						</td>
-						<td style="width: 86px;" align="right">
-							<span style="font-size: 10px;">${record.subtotal}</span>
-						</td>
-					</tr>
-					<tr>
-						<td style="font-weight: bold; color: rgb(51, 51, 51); width: 180px;">
-							<span style="font-size: 10px;">${record.taxtotal@label}(${record.taxrate}%)</span>
-						</td>
-						<td style="width: 86px;" align="right">
-							<span style="font-size: 10px;">${record.taxtotal}</span>
-						</td>
-					</tr>
-					<tr>
-						<td
-							style="font-weight: bold; color: rgb(51, 51, 51); width: 180px; text-align: left;">
-							<span style="font-size: 10px;">Total Order (${record.currency})</span>
-						</td>
-						<td style="width: 86px;" align="right">
-							<span style="font-size: 10px;">${record.total}</span>
-						</td>
-					</tr>
-				</table>
-				<table style="font-size: 8pt; width: 100%;" align="right">
-					<tr>
-						<td style="padding: 0px; text-align: right;" colspan="2" align="right">
-							<span style="font-size: 12px;">
-								<strong>Digitally Signed by authorized personnel : Mr. Craig
-									Gledhill</strong>
-							</span>
-						</td>
-					</tr>
-				</table>
 
+                <#assign subtotal_after_discount = record.subtotal+record.discounttotal />
+
+                <table class="bawah" style="margin-bottom: 7px;">
+                    <#assign nolkan = record.total-record.total />
+                    <tr>
+                        <td width="35%">
+                            <strong>Comments:</strong>
+                        </td>
+                        <td width="25%">
+                            <#if subsidiary.currency != record.currency>
+                                <strong><u>For Singapore GST Purpose Only</u></strong>
+                            </#if>
+                        </td>
+                        <td class="borderkiri borderkanan" width="20%">
+                            <strong>Less</strong>
+                        </td>
+                        <td align="right" width="20%">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td rowspan="4">
+                            <#if record.custbody_item_commentsg !="">${record.custbody_item_commentsg}</#if>
+                        </td>
+                        <td rowspan="5" colspan="1">
+                            <#if subsidiary.currency != record.currency>
+                            <table width="100%">
+                                <#assign exchangerate = record.exchangerate * 1 />
+                                <#assign sgd_baseamount = (record.subtotal+record.discounttotal) * record.exchangerate />
+                                <#assign sgd_taxamount = record.taxtotal * record.exchangerate />
+                                <#assign sgd_totalamount = record.total * record.exchangerate />
+                                <tr>
+                                    <td>Exchange Rate to SGD</td>
+                                    <td align="right">${exchangerate?number}</td>
+                                </tr>
+                                <tr>
+                                    <td>Base Amount in SGD</td>
+                                    <td align="right">${sgd_baseamount?string["#,##0.00"]}</td>
+                                </tr>
+                                <tr>
+                                    <td>Add (GST 9%)</td>
+                                    <td align="right">${sgd_taxamount?string["#,##0.00"]}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Amount in SGD</td>
+                                    <td align="right">${sgd_totalamount?string["#,##0.00"]}</td>
+                                </tr>
+                            </table>
+                            </#if>
+                        </td>
+                        <td class="borderkiri borderkanan" width="20%">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<strong>Included Tax</strong>
+                        </td>
+                        <td align="right" width="20%">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<strong>Order Discount</strong>
+                        </td>
+                        <td style="padding-bottom: 5px; padding-top: 5px;" align="right">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;">
+                            <strong>Subtotal</strong>
+                        </td>
+                        <td style="padding-bottom: 5px; padding-top: 5px;" align="right">
+                            ${record.subtotal}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;">
+                            <strong>Tax Total (GST 9%)</strong>
+                        </td>
+                        <td style="padding-bottom: 5px; padding-top: 5px;" align="right">${record.taxtotal}</td>
+                    </tr>
+                    <tr>
+                        <td>${record.custbody_aca_so_reference}</td>
+                        <td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;">
+                            <strong>Total Order ${record.currency}</strong>
+                        </td>
+                        <td style="padding-bottom: 5px; padding-top: 5px;" align="right">
+                            ${record.total}
+                        </td>
+                    </tr>
+                </table>
+                <table class="atas" style="border-collapse: collapse; border-style: none; border-width: 1px; margin-right: 0px; margin-left: auto;" border="1">
+                    <tr>
+                        <td width="50%">
+                            <strong>Banking Instructions (Bank Charges to be borne by Payer):</strong>
+                        </td>
+                        <td align="right">
+                            <strong>
+                                Digitally Signed by authorized personnel : Mr. Craig Gledhill
+                            </strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <#if record.currency == "USD">
+                            <td style="height: 5px;" width="20%">
+                                "Oversea-Chinese Banking Corporation Ltd<br />
+                                65 Chulia Street, OCBC Centre (S) 049513<br />
+                                Swift Code: OCBCSGSG<br />
+                                Account Name: ACA Pacific Technology (S) Pte Ltd<br />
+                                Account Number (USD): 501-002927-301"
+                            </td>
+                        <#else>
+                            <td style="height: 5px;" width="20%">
+                                "Oversea-Chinese Banking Corporation Ltd<br />
+                                65 Chulia Street, OCBC Centre (S) 049513<br />
+                                Swift Code: OCBCSGSG<br />
+                                Account Name: ACA Pacific Technology (S) Pte Ltd<br />
+                                Account Number (SGD): 504-032483-001"
+                            </td>
+                        </#if>
+                    </tr>
+                </table>
 			</macro>
 		</macrolist>
 		<style type="text/css">
@@ -349,7 +376,7 @@
 			}
 		</style>
 	</head>
-	<body header="nlheader" header-height="25%" footer="nlfooter" footer-height="23%"
+	<body header="nlheader" header-height="25%" footer="nlfooter" footer-height="18%"
 		padding="0.5in 0.5in 0.5in 0.5in" size="Letter">
 		
 		<#if record.item?has_content>
