@@ -346,7 +346,30 @@
 							<td class="borderkanan" align="center">${item.units}</td>
 							<td align="right">${item.quantity}</td>
 						</tr>
-						<#if item.custcol_itemcomm?has_content>
+                        
+                        <tr>
+                            <td class="borderkanan">&nbsp;</td>
+                            <td class="borderkanan">&nbsp;</td>
+                            <td class="borderkanan" align="left">
+                                <#if item.custcol_itemcomm?has_content>
+                                    <br/>
+                                    ${item.custcol_itemcomm}
+                                </#if>
+                                <#if item.custcol_my_license_key?has_content>
+                                    <br/>
+                                    <strong>License Key :</strong> ${item.custcol_my_license_key}
+                                </#if>
+                                <#if item.custcol_my_expire_date?has_content>
+                                    <br/>
+                                    <strong>Expiry Date :</strong> ${item.custcol_my_expire_date}
+                                </#if>
+                            </td>
+                            <td class="borderkanan">&nbsp;</td>
+                            <td class="borderkanan">&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+
+						<#--  <#if item.custcol_itemcomm?has_content>
 							<tr>
 								<td class="borderkanan">&nbsp;</td>
 								<td class="borderkanan">&nbsp;</td>
@@ -368,7 +391,7 @@
 								<td class="borderkanan">&nbsp;</td>
 								<td>&nbsp;</td>
 							</tr>
-						</#if>
+						</#if>  -->
                         <#if !record.custbody_aca_hide_sn_print>
                             <#if item.custcol_aca_inv_detail_number?has_content>
                                 <#assign serials = item.custcol_aca_inv_detail_number?split(",") />
