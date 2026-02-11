@@ -1,5 +1,19 @@
 <?xml version="1.0"?><!DOCTYPE pdf PUBLIC "-//big.faceless.org//report" "report-1.1.dtd">
 <pdf>
+
+<#--
+    SG Invoice v1.3
+    Created By: Rian Luthfi
+    Date Created: N/A
+    Last Updated By: Rian Luthfi
+    Last Updated Date: N/A
+
+    History:
+    v1.3 - N.A 	- Add Discount Information (Above Subtotal)
+				- Add Option to hide zero quantity
+-->
+
+
 	<head>
 		<link name="NotoSans" type="font" subtype="truetype" src="${nsfont.NotoSans_Regular}" src-bold="${nsfont.NotoSans_Bold}" src-italic="${nsfont.NotoSans_Italic}" src-bolditalic="${nsfont.NotoSans_BoldItalic}" bytes="2" />
 		<#if .locale == "zh_CN">
