@@ -9,6 +9,8 @@
 
     History:
     v1.2 - 2026-02-03 - Update to use record.item instead of salesorder.item
+			2026-02-13 - Back to use salesorder.item instead of record.item
+						 Because there issue at item.units output when using record.item the output is by ID not by name
 -->
 
 <pdf>
@@ -321,10 +323,14 @@
 	</style>
 </head>
 	<body header="nlheader" header-height="25%" footer="nlfooter" footer-height="10%" padding="0.5in 0.5in 0.5in 0.5in" size="Letter">
-		<#if record.item?has_content>
+		<#--  
+			salesorder.item
+			record.item  
+		-->
+		<#if salesorder.item?has_content>
 			<table class="itemtable" style="width: 100%; margin-top: 10px; height: 75.5358px;" border="1px">										
 				<!-- start items -->
-				<#list record.item as item>
+				<#list salesorder.item as item>
 					<#if item_index==0>
 						<thead>
 							<tr>
@@ -369,29 +375,6 @@
                             <td>&nbsp;</td>
                         </tr>
 
-						<#--  <#if item.custcol_itemcomm?has_content>
-							<tr>
-								<td class="borderkanan">&nbsp;</td>
-								<td class="borderkanan">&nbsp;</td>
-								<td class="borderkanan" align="left">
-									<#if item.custcol_itemcomm?has_content>
-										<br/>
-										${item.custcol_itemcomm}
-									</#if>
-									<#if item.custcol_my_license_key?has_content>
-										<br/>
-										<strong>License Key :</strong> ${item.custcol_my_license_key}
-									</#if>
-									<#if item.custcol_my_expire_date?has_content>
-										<br/>
-										<strong>Expiry Date :</strong> ${item.custcol_my_expire_date}
-									</#if>
-								</td>
-								<td class="borderkanan">&nbsp;</td>
-								<td class="borderkanan">&nbsp;</td>
-								<td>&nbsp;</td>
-							</tr>
-						</#if>  -->
                         <#if !record.custbody_aca_hide_sn_print>
                             <#if item.custcol_aca_inv_detail_number?has_content>
                                 <#assign serials = item.custcol_aca_inv_detail_number?split(",") />
