@@ -355,7 +355,11 @@
 								<th class="borderkanan borderbawah" align="center" width="38%">Description</th>
 								<th class="borderkanan borderbawah" align="center" width="12%">Unit Price</th>
 								<th class="borderkanan borderbawah" align="center" width="5%">UOM</th>
-								<th class="borderbawah" align="center" width="15%">Extended Price (${record.currency})</th>
+								<th class="borderbawah" align="center" width="15%">
+									<p style="text-align: center;">
+										Extended Price (${record.currency})
+									</p>
+								</th>
 							</tr>
 						</thead>
 					</#if>
