@@ -1,5 +1,20 @@
 <?xml version="1.0"?><!DOCTYPE pdf PUBLIC "-//big.faceless.org//report" "report-1.1.dtd">
 <pdf>
+
+<#--
+    Version         : ID Invoice v1
+    Created By      : Rian
+
+    Change Log
+    ==========
+    2026-02-20 - ID Invoice v1
+		1. Add option to hide item print
+		2. Add option to input DP% and DP Amount
+		3. Remove item.class!="COGS" condition at print item
+
+	2025 - ID Invoice v0 (TTD)
+		Initial version
+-->
 <head>
 	<link name="NotoSans" type="font" subtype="truetype" src="${nsfont.NotoSans_Regular}" src-bold="${nsfont.NotoSans_Bold}" src-italic="${nsfont.NotoSans_Italic}" src-bolditalic="${nsfont.NotoSans_BoldItalic}" bytes="2" />
 	<#if .locale == "zh_CN">
@@ -67,69 +82,109 @@
 <td class="borderatas borderbawah borderkanan" align="center">
 <p style="text-align: center;"><strong>Terms</strong><br />${record.terms}</p>
 </td>
-</tr></table>
+</tr>
+</table>
         </macro>
         <macro id="nlfooter">
-            <table class="bawah" style="margin-bottom: 7px;"><#assign nolkan = record.total-record.total /><tr>
-<td width="55%"><strong>Comments:</strong></td>
-<td class="borderkiri borderkanan" width="25%"><strong>Subtotal</strong></td>
-<td align="right" width="20%">${record.subtotal}</td>
-</tr>
-<tr>
-<td><#if record.cseg1 !="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END USER: ${record.cseg1} <#else> &nbsp; </#if></td>
-<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;"><strong>Tax Total</strong></td>
-<td class="borderbawah" style="padding-bottom: 5px; padding-top: 5px;" align="right">${record.taxtotal}</td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;"><strong>Total Amount</strong></td>
-<td style="padding-bottom: 5px; padding-top: 5px;" align="right">${record.total}</td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;">Less Payment</td>
-<td style="padding-bottom: 5px; padding-top: 5px;" align="right">${nolkan}</td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;">Less Pmt. Disc</td>
-<td class="borderbawah" style="padding-bottom: 5px; padding-top: 5px;" align="right">${nolkan}</td>
-</tr>
-<tr>
-<td>${record.custbody_aca_so_reference}</td>
-<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;"><strong>Amount due ${record.currency}</strong></td>
-<td style="padding-bottom: 5px; padding-top: 5px;" align="right">${record.total}</td>
-</tr></table>
-<table class="atas"><tr>
-<td width="50%">• Invoice over due 60 days: The partner/customer account will be on hold.<br />• Invoice over due &gt;90 days: An interest will be applied with the amount of 3% per month.</td>
-<td rowspan="4"><@filecabinet nstype="image" src="http://6250403.shop.netsuite.com/core/media/media.nl?id=99503&c=6250403&h=U2KhYFY10VQ0l9JNTcmdjxKY7NGf80ShkBA1TRfX1tTmyMfK" width="130" height="85" /></td>
-</tr>
-<tr>
-<td><strong>Banking Instructions:</strong></td>
-</tr>
-<tr>
-<td style="height: 5px;" width="20%">
-	<#if record.currency=='IDR'>
-		${record.custbody_aca_bank_details}
-	<#elseif record.currency=='USD'>
-		${subsidiary.custrecord_id_bank_details_usd}
-	<#else>
-		${record.custbody_aca_bank_details}
-	</#if>
-</td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-</tr>
-<tr>
-<td>&nbsp;</td>
-<td style="height: 5px;" align="center">Theresa Minarni</td>
-</tr>
-<tr>
-<td style="height: 1px;" width="30%">&nbsp;</td>
-<td class="borderatas" style="height: 1px;" align="center">Head of Accounting &amp; Finance</td>
-</tr></table>
-        </macro>
+            <table class="bawah" style="margin-bottom: 7px;">
+				<#assign nolkan = record.total-record.total />
+
+				<#-- For Calculation Down Payment (DP): -->
+				<#assign totalAmount = record.total>
+				<#assign dpPercent = record.custbody_aca_dp_percent>
+				<#assign dpAmount = record.custbody_aca_dp_amount>
+
+				<#-- <#assign calculatedDP = 0>
+
+				<#if dpAmount gt 0>
+					<#assign calculatedDP = dpAmount>
+				</#if>
+
+				<#assign finalTotal = totalAmount - calculatedDP> -->
+
+				<tr>
+					<td width="55%"><strong>Comments:</strong></td>
+					<td class="borderkiri borderkanan" width="25%"><strong>Subtotal</strong></td>
+					<td align="right" width="20%">${record.subtotal}</td>
+				</tr>
+				<tr>
+					<td><#if record.cseg1 !="">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END USER: ${record.cseg1} <#else> &nbsp; </#if></td>
+					<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;"><strong>Tax Total</strong></td>
+					<td class="borderbawah" style="padding-bottom: 5px; padding-top: 5px;" align="right">${record.taxtotal}</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;"><strong>Total Amount</strong></td>
+					<td style="padding-bottom: 5px; padding-top: 5px;" align="right">${record.total}</td>
+				</tr>
+				<tr>
+					<#if dpAmount gt 0>
+						<td>&nbsp;</td>
+						<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;">Less Down Payment ${record.custbody_aca_dp_percent}</td>
+						<td style="padding-bottom: 5px; padding-top: 5px; color: red" align="right">(${record.custbody_aca_dp_amount})</td>
+					<#else>
+						<td>&nbsp;</td>
+						<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;">Less Down Payment</td>
+						<td style="padding-bottom: 5px; padding-top: 5px;" align="right">${nolkan}</td>
+					</#if>
+					<#-- <td>&nbsp;</td>
+					<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;">Less Payment</td>
+					<td style="padding-bottom: 5px; padding-top: 5px;" align="right">${nolkan}</td> -->
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;">Less Pmt. Disc</td>
+					<td class="borderbawah" style="padding-bottom: 5px; padding-top: 5px;" align="right">${nolkan}</td>
+				</tr>
+				<tr>
+					<#if dpAmount gt 0>
+						<td>&nbsp;</td>
+						<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;"><strong>Amount due ${record.currency}</strong></td>
+						<td style="padding-bottom: 5px; padding-top: 5px;" align="right">${record.custbody_aca_amount_due}</td>
+					<#else>
+						<td>${record.custbody_aca_so_reference}</td>
+						<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;"><strong>Amount due ${record.currency}</strong></td>
+						<td style="padding-bottom: 5px; padding-top: 5px;" align="right">${record.total}</td>
+					</#if>
+					<#-- <td>${record.custbody_aca_so_reference}</td>
+					<td class="borderkiri borderkanan" style="padding-bottom: 5px; padding-top: 5px;"><strong>Amount due ${record.currency}</strong></td>
+					<td style="padding-bottom: 5px; padding-top: 5px;" align="right">${record.total}</td> -->
+				</tr>
+			</table>
+			
+			<#-- Section Bank Instruction and Signature -->
+			<table class="atas">
+				<tr>
+					<td width="50%">• Invoice over due 60 days: The partner/customer account will be on hold.<br />• Invoice over due &gt;90 days: An interest will be applied with the amount of 3% per month.</td>
+					<td rowspan="4"><@filecabinet nstype="image" src="http://6250403.shop.netsuite.com/core/media/media.nl?id=99503&c=6250403&h=U2KhYFY10VQ0l9JNTcmdjxKY7NGf80ShkBA1TRfX1tTmyMfK" width="130" height="85" /></td>
+				</tr>
+				<tr>
+					<td><strong>Banking Instructions:</strong></td>
+				</tr>
+				<tr>
+					<td style="height: 5px;" width="20%">
+						<#if record.currency=='IDR'>
+							${record.custbody_aca_bank_details}
+						<#elseif record.currency=='USD'>
+							${subsidiary.custrecord_id_bank_details_usd}
+						<#else>
+							${record.custbody_aca_bank_details}
+						</#if>
+					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td style="height: 5px;" align="center">Theresa Minarni</td>
+				</tr>
+				<tr>
+					<td style="height: 1px;" width="30%">&nbsp;</td>
+					<td class="borderatas" style="height: 1px;" align="center">Head of Accounting &amp; Finance</td>
+				</tr>		
+			</table>
+		</macro>
     </macrolist>
     <style type="text/css">* {
 		<#if .locale == "zh_CN">
@@ -256,8 +311,9 @@
 						</tr>
 					</thead>
 				</#if>
-				<tr>
-					<#if item.class!="COGS">
+				<#-- Only print if Hide Item Print is NOT checked -->
+    			<#if !item.custcol_aca_hide_item_on_print>
+					<tr>
 						<td class="borderkanan" align="right">${item.quantity}</td>
 						<td class="borderkanan" align="left">
 							<!-- Handling Vendor Name  -->
@@ -271,8 +327,8 @@
 						<td class="borderkanan" align="right">${item.rate}</td>
 						<td class="borderkanan" align="center">${item.units}</td>
 						<td align="right">${item.amount}</td>
-					</#if>
-				</tr>
+					</tr>
+				</#if>
 			</#list>
 			<!-- end items -->
 		</table>
